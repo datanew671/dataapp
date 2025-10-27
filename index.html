@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Videos Player</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+            max-width: 800px;
+        }
+        
+        .ad-container {
+            width: 300px;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .video-container {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        video {
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+            background-color: #000;
+            min-height: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .url-input-container {
+            margin-bottom: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            direction: ltr;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .url-input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            outline: none;
+        }
+        
+        .play-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+        }
+        
+        .play-button:active {
+            transform: translateY(0);
+        }
+        
+        .button-container {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #2196F3, #0b7dda);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #0b7dda, #2196F3);
+        }
+        
+        .reset-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #f57c00, #ff9800);
+        }
+        
+        .instructions {
+            color: #666;
+            margin-top: 12px;
+            font-size: 14px;
+            background: #e9f7e9;
+            padding: 8px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .error-message {
+            color: #f44336;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #ffeaea;
+            display: none;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .success-message {
+            color: #4CAF50;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #e9f7e9;
+            display: none;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .video-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            border-radius: 10px;
+            min-height: 300px;
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding: 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #4CAF50;
+        }
+        
+        /* موبائل کے لیے میڈیا کوئریز */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .ad-container {
+                order: 2;
+                margin-top: 20px;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .video-container {
+                padding: 20px 15px;
+            }
+            
+            .url-input-container {
+                padding: 15px;
+            }
+            
+            video, .video-placeholder {
+                min-height: 250px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .video-container {
+                padding: 15px 10px;
+                border-radius: 12px;
+            }
+            
+            .url-input-container {
+                padding: 12px;
+            }
+            
+            .url-input {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+            
+            .play-button, .download-link, .reset-button {
+                padding: 10px 15px;
+                font-size: 15px;
+            }
+            
+            video, .video-placeholder {
+                min-height: 200px;
+            }
+        }
+        
+        /* چھوٹی موبائل سکرینز کے لیے */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 20px;
+            }
+            
+            .video-container {
+                padding: 12px 8px;
+            }
+            
+            .url-input-container {
+                padding: 10px;
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="video-container">
+                <div class="logo">Data Videos</div>
+                <h1>Player</h1>
+                
+                <div class="url-input-container">
+                    <input type="text" class="url-input" placeholder="Paste video link here..." id="videoUrl" value="https://pixeldrain.dev/api/file/WUJYr2AS?download">
+                    <button class="play-button" onclick="loadVideo()">Play Video</button>
+                    <p class="instructions">Paste any direct video link (MP4, WebM, OGG, etc.)</p>
+                    <p class="error-message" id="errorMessage"></p>
+                    <p class="success-message" id="successMessage"></p>
+                </div>
+                
+                <div class="video-placeholder" id="videoPlaceholder">
+                    Video will appear here after loading
+                </div>
+                
+                <video controls id="videoPlayer" style="display: none;">
+                    Your browser does not support the video element.
+                </video>
+                
+                <div class="button-container">
+                    <a href="#" class="download-link" id="downloadLink" download style="display: none;">Download Video</a>
+                    <button class="reset-button" onclick="resetPlayer()">Reset Player</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="ad-container">
+            <div id="frame" style="width: 300px; height: auto; margin: 0 auto;">
+                <iframe data-aa='2255878' src='//ad.a-ads.com/2255878/?size=300x600'
+                    style='border:0; padding:0; width:300px; height:600px; overflow:hidden; display: block; margin: 0 auto'></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadVideo() {
+            const videoUrl = document.getElementById('videoUrl').value.trim();
+            const videoPlayer = document.getElementById('videoPlayer');
+            const downloadLink = document.getElementById('downloadLink');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const videoPlaceholder = document.getElementById('videoPlaceholder');
+            
+            // پہلے سے موجود میسجز کو ہٹائیں
+            errorMessage.style.display = "none";
+            successMessage.style.display = "none";
+            
+            // لنک کی بنیادی جانچ
+            if (!videoUrl) {
+                errorMessage.textContent = "Please enter a video URL";
+                errorMessage.style.display = "block";
+                return;
+            }
+            
+            // ویڈیو پلیئر کو دکھائیں اور پلیس ہولڈر کو چھپائیں
+            videoPlaceholder.style.display = "none";
+            videoPlayer.style.display = "block";
+            
+            // ویڈیو لوڈ کریں
+            videoPlayer.src = videoUrl;
+            downloadLink.href = videoUrl;
+            downloadLink.style.display = "inline-block";
+            
+            // ویڈیو لوڈ ہونے پر
+            videoPlayer.onloadeddata = function() {
+                successMessage.textContent = "Video loaded successfully!";
+                successMessage.style.display = "block";
+                console.log("Video loaded successfully");
+            };
+            
+            // ویڈیو میں خرابی کی صورت میں
+            videoPlayer.onerror = function() {
+                errorMessage.textContent = "Error: Could not load video. Please check the link and try again.";
+                errorMessage.style.display = "block";
+                videoPlayer.style.display = "none";
+                videoPlaceholder.style.display = "flex";
+            };
+            
+            // ویڈیو پلے ہونے پر
+            videoPlayer.onplay = function() {
+                successMessage.textContent = "Video is now playing";
+                successMessage.style.display = "block";
+            };
+        }
+        
+        function resetPlayer() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const downloadLink = document.getElementById('downloadLink');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const videoPlaceholder = document.getElementById('videoPlaceholder');
+            const videoUrl = document.getElementById('videoUrl');
+            
+            videoPlayer.src = "";
+            videoPlayer.style.display = "none";
+            downloadLink.style.display = "none";
+            errorMessage.style.display = "none";
+            successMessage.style.display = "none";
+            videoPlaceholder.style.display = "flex";
+            videoUrl.value = "";
+        }
+        
+        // پہلے سے طے شدہ لنک کے لیے
+        document.addEventListener('DOMContentLoaded', function() {
+            // آپ یہاں ڈیفالٹ لنک سیٹ کر سکتے ہیں
+            document.getElementById('videoUrl').value = "";
+        });
+        
+        // انٹر کی دبائی جانے پر بھی ویڈیو لوڈ ہو
+        document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadVideo();
+            }
+        });
+    </script>
+</body>
+</html>
